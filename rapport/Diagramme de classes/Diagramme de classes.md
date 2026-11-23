@@ -1,73 +1,57 @@
 ```mermaid
 classDiagram
-    direction TB
+    direction LR
 
-    class Tutor {
-        -int id
-        -string firstName
-        -string lastName
-        -string email
-        -string phone
-        -string bio
-        +getFullName() string
-        +getCourses() List~Course~
+    class Utilisateur {
+        +int id
+        +string nom
+        +string email
+        +datetime dateInscription
     }
 
-    class SchoolSubject {
-        -int id
-        -string name
-        -string description
-        -datetime createdAt
-        -datetime updatedAt
-        +getCourses() List~Course~
-        +toArray() array
+    class Portefeuille {
+        +int id
+        +decimal soldeVirtuel
+        +decimal valeurInitiale
+        +datetime dateCreation
+        +acheter(action, quantite)
+        +vendre(action, quantite)
+        +calculerValeurTotale()
     }
 
-    class Course {
-        -int id
-        -string title
-        -string slug
-        -string description
-        -int tutorId
-        -int subjectId
-        -string status
-        -datetime createdAt
-        -datetime updatedAt
-        +getTutor() Tutor
-        +getSubject() SchoolSubject
-        +getEnrolledStudents() List~Student~
-        +publish() void
-        +draft() void
-        +toArray() array
+    class Action {
+        +int id
+        +string symbole
+        +string nomEntreprise
+        +decimal dernierPrix
+        +decimal variationPourcentage
     }
 
-    class Student {
-        -int id
-        -string firstName
-        -string lastName
-        -string email
-        -string studentNumber
-        -datetime registeredAt
-        +getFullName() string
-        +getEnrolledCourses() List~Course~
-        +enrollInCourse(courseId) bool
+    class Position {
+        +int id
+        +decimal quantite
+        +decimal prixMoyenAchat
+        +calculerValeur(prixActuel)
     }
 
-    class Enrollment {
-        -int id
-        -int studentId
-        -int courseId
-        -datetime enrolledAt
-        -string progressStatus
-        -float grade
-        +getStudent() Student
-        +getCourse() Course
+    class Transaction {
+        +int id
+        +string type
+        +decimal quantite
+        +decimal prixUnitaire
+        +datetime dateExecution
     }
 
-    Tutor "1" --> "0..*" Course : enseigne / dispense
-    SchoolSubject "1" --> "0..*" Course : catégorise
+    class CoursHistorique {
+        +int id
+        +decimal prix
+        +datetime dateEnregistrement
+    }
 
-    Student "1" --> "0..*" Enrollment : effectue
-    Course "1" --> "0..*" Enrollment : enregistre
-    Student "0..*" .. "0..*" Course : s'inscrit à
+    Utilisateur "1" --> "1" Portefeuille : possede
+    Portefeuille "1" --> "0..*" Position : contient
+    Action "1" --> "0..*" Position : représente
+    Portefeuille "1" --> "0..*" Transaction : enregistre
+    Action "1" --> "0..*" Transaction : concerne
+    Action "1" --> "0..*" CoursHistorique : historise
 ```
